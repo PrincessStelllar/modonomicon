@@ -221,10 +221,21 @@ public class BookMultiblockPageRenderer extends BookPageRenderer<BookMultiblockP
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float ticks) {
+        var textY = this.getTextY();
+        this.renderBookTextHolder(guiGraphics, this.page.getText(), 0, textY, BookEntryScreen.PAGE_WIDTH, BookEntryScreen.PAGE_HEIGHT - textY);
+
+        //TODO: render button to show multiblock in world
+        //            //TODO: show multiblock preview on button click
+//            var block = MultiblockDataManager.get().getMultiblock(ResourceLocation.tryParse("modonomicon:blockentity"));
+//            MultiblockPreviewRenderer.setMultiblock(block, Component.translatable("multiblock.modonomicon.test"), true);
 
         //render a frame for the multiblock render area
         int x = BookEntryScreen.PAGE_WIDTH / 2 - 53;
         int y = 7;
+
+        x += this.parentScreen.getBook().getBookTextOffsetX();
+        y += this.parentScreen.getBook().getBookTextOffsetY();
+
         RenderSystem.enableBlend();
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
         BookContentRenderer.drawFromContentTexture(guiGraphics, this.page.getBook(), x, y, 405, 149, 106, 106);
@@ -235,14 +246,6 @@ public class BookMultiblockPageRenderer extends BookPageRenderer<BookMultiblockP
         }
 
         this.renderMultiblock(guiGraphics);
-
-        var textY = this.getTextY();
-        this.renderBookTextHolder(guiGraphics, this.page.getText(), 0, textY, BookEntryScreen.PAGE_WIDTH, BookEntryScreen.PAGE_HEIGHT - textY);
-
-        //TODO: render button to show multiblock in world
-        //            //TODO: show multiblock preview on button click
-//            var block = MultiblockDataManager.get().getMultiblock(ResourceLocation.tryParse("modonomicon:blockentity"));
-//            MultiblockPreviewRenderer.setMultiblock(block, Component.translatable("multiblock.modonomicon.test"), true);
 
         var style = this.getClickedComponentStyleAt(mouseX, mouseY);
         if (style != null)

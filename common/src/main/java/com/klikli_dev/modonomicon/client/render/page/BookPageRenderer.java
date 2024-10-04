@@ -197,6 +197,13 @@ public abstract class BookPageRenderer<T extends BookPage> {
      */
     public void renderTitle(GuiGraphics guiGraphics, BookTextHolder title, boolean showTitleSeparator, int x, int y) {
 
+        x += this.parentScreen.getBook().getBookTextOffsetX();
+        y += this.parentScreen.getBook().getBookTextOffsetY();
+
+        var width = (float) BookEntryScreen.MAX_TITLE_WIDTH;
+        width += this.parentScreen.getBook().getBookTextOffsetWidth();
+        width -= this.parentScreen.getBook().getBookTextOffsetX(); //always remove the offset x from the width to avoid overflow
+
         guiGraphics.pose().pushPose();
 
         if (title instanceof RenderedBookTextHolder renderedTitle) {
@@ -205,7 +212,7 @@ public abstract class BookPageRenderer<T extends BookPage> {
                     renderedTitle.getRenderedText().stream().map(Component::getVisualOrderText).toList());
 
             //if title is larger than allowed, scaled to fit
-            var scale = Math.min(1.0f, (float) BookEntryScreen.MAX_TITLE_WIDTH / (float) this.font.width(formattedCharSequence));
+            var scale = Math.min(1.0f, (float) width / (float) this.font.width(formattedCharSequence));
             if (scale < 1) {
                 guiGraphics.pose().translate(0, y - y * scale, 0);
                 guiGraphics.pose().scale(scale, scale, scale);
@@ -219,7 +226,7 @@ public abstract class BookPageRenderer<T extends BookPage> {
 
             var titleComponent = Component.empty().append(title.getComponent()).withStyle(s -> s.withFont(font));
             //if title is larger than allowed, scaled to fit
-            var scale = Math.min(1.0f, (float) BookEntryScreen.MAX_TITLE_WIDTH / (float) this.font.width(titleComponent.getVisualOrderText()));
+            var scale = Math.min(1.0f, (float) width / (float) this.font.width(titleComponent.getVisualOrderText()));
             if (scale < 1) {
                 guiGraphics.pose().translate(0, y - y * scale, 0);
                 guiGraphics.pose().scale(scale, scale, scale);
@@ -278,6 +285,9 @@ public abstract class BookPageRenderer<T extends BookPage> {
 
     @Nullable
     protected Style getClickedComponentStyleAtForTitle(BookTextHolder title, int x, int y, double pMouseX, double pMouseY) {
+        x += this.parentScreen.getBook().getBookTextOffsetX();
+        y += this.parentScreen.getBook().getBookTextOffsetY();
+
         //check if we are vertically over the title line
         if (!(pMouseY > y && pMouseY < y + this.font.lineHeight))
             return null;

@@ -55,6 +55,10 @@ public class BookImagePageRenderer extends BookPageRenderer<BookImagePage> imple
 
         int x = BookEntryScreen.PAGE_WIDTH / 2 - 53;
         int y = 7;
+
+        x += this.parentScreen.getBook().getBookTextOffsetX();
+        y += this.parentScreen.getBook().getBookTextOffsetY();
+
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
         RenderSystem.enableBlend();
         guiGraphics.pose().pushPose();

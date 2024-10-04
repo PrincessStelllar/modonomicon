@@ -30,6 +30,9 @@ public abstract class BookRecipePageRenderer<R extends Recipe<?>, T extends Book
         int recipeX = X;
         int recipeY = Y;
 
+        recipeX += this.parentScreen.getBook().getBookTextOffsetX();
+        recipeY += this.parentScreen.getBook().getBookTextOffsetY();
+
         if (this.page.getRecipe1() != null) {
 
             //Title 1 is always rendered (falls back to recipe name)

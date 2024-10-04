@@ -89,6 +89,10 @@ public class BookEntityPageRenderer extends BookPageRenderer<BookEntityPage> imp
 
         int x = BookEntryScreen.PAGE_WIDTH / 2 - 53;
         int y = 7;
+
+        x += this.parentScreen.getBook().getBookTextOffsetX();
+        y += this.parentScreen.getBook().getBookTextOffsetY();
+
         RenderSystem.enableBlend();
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
        BookContentRenderer.drawFromContentTexture(guiGraphics, this.getPage().getBook(), x, y, 405, 149, 106, 106);
