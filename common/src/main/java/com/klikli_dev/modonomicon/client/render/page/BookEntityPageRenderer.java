@@ -93,9 +93,17 @@ public class BookEntityPageRenderer extends BookPageRenderer<BookEntityPage> imp
         x += this.parentScreen.getBook().getBookTextOffsetX();
         y += this.parentScreen.getBook().getBookTextOffsetY();
 
+        var width = 106;
+        var height = 106;
+        height += this.parentScreen.getBook().getBookTextOffsetHeight();
+        height -= this.parentScreen.getBook().getBookTextOffsetY(); //always remove the offset y from the height to avoid overflow
+
+        width += this.parentScreen.getBook().getBookTextOffsetWidth();
+        width -= this.parentScreen.getBook().getBookTextOffsetX(); //always remove the offset x from the width to avoid overflow
+
         RenderSystem.enableBlend();
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
-       BookContentRenderer.drawFromContentTexture(guiGraphics, this.getPage().getBook(), x, y, 405, 149, 106, 106);
+       BookContentRenderer.drawFromContentTexture(guiGraphics, this.getPage().getBook(), x, y, 405, 149, width, height);
 
         if (this.errored) {
             guiGraphics.drawString(this.font, Component.translatable(Gui.PAGE_ENTITY_LOADING_ERROR), 58, 60, 0xFF0000, true);
