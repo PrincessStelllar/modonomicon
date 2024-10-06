@@ -53,20 +53,25 @@ public class BookImagePageRenderer extends BookPageRenderer<BookImagePage> imple
         var textY = this.getTextY();
         this.renderBookTextHolder(guiGraphics, this.getPage().getText(), 0, textY, BookEntryScreen.PAGE_WIDTH, BookEntryScreen.PAGE_HEIGHT - textY);
 
-        int x = BookEntryScreen.PAGE_WIDTH / 2 - 53;
-        int y = 7;
+        int xOffset = this.parentScreen.getBook().getBookTextOffsetX();
+        int yOffset = this.parentScreen.getBook().getBookTextOffsetY();
+        int widthOffset = this.parentScreen.getBook().getBookTextOffsetWidth();
 
-        x += this.parentScreen.getBook().getBookTextOffsetX();
-        y += this.parentScreen.getBook().getBookTextOffsetY();
+        int imageWidth = 200;
+        int imageHeight = 200;
+
+        int effectivePageWidth = BookEntryScreen.PAGE_WIDTH + widthOffset;
+        int x = (int) ((effectivePageWidth - imageWidth * 0.5f) / 2 + xOffset);
+        int y = 7 + yOffset;
 
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
         RenderSystem.enableBlend();
         guiGraphics.pose().pushPose();
         guiGraphics.pose().scale(0.5F, 0.5F, 1);
         if (this.page.useLegacyRendering())
-            guiGraphics.blit(this.page.getImages()[this.index], x * 2 + 6, y * 2 + 6, 0, 0, 200, 200);
+            guiGraphics.blit(this.page.getImages()[this.index], x * 2 + 6, y * 2 + 6, 0, 0, imageWidth, imageHeight);
         else
-            guiGraphics.blit(this.page.getImages()[this.index], x * 2 + 6, y * 2 + 6, 0, 0, 0, 200, 200, 200, 200);
+            guiGraphics.blit(this.page.getImages()[this.index], x * 2 + 6, y * 2 + 6, 0, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
         guiGraphics.pose().scale(2F, 2F, 1);
         guiGraphics.pose().popPose();
 
@@ -80,7 +85,6 @@ public class BookImagePageRenderer extends BookPageRenderer<BookImagePage> imple
             guiGraphics.fill(xs, ys, xs + 20, ys + 11, 0x44000000);
             guiGraphics.fill(xs - 1, ys - 1, xs + 20, ys + 11, 0x44000000);
         }
-
 
         var style = this.getClickedComponentStyleAt(mouseX, mouseY);
         if (style != null)
