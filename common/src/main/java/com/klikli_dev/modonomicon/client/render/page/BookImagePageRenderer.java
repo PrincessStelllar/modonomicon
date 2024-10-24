@@ -53,26 +53,25 @@ public class BookImagePageRenderer extends BookPageRenderer<BookImagePage> imple
         var textY = this.getTextY();
         this.renderBookTextHolder(guiGraphics, this.getPage().getText(), 0, textY, BookEntryScreen.PAGE_WIDTH, BookEntryScreen.PAGE_HEIGHT - textY);
 
-        int xOffset = this.parentScreen.getBook().getBookTextOffsetX();
-        int yOffset = this.parentScreen.getBook().getBookTextOffsetY();
-        int widthOffset = this.parentScreen.getBook().getBookTextOffsetWidth();
+        var xOffset = 10; //this.parentScreen.getBook().getBookTextOffsetX();
+        var availableWidth = BookEntryScreen.PAGE_WIDTH;
+        availableWidth += this.parentScreen.getBook().getBookTextOffsetWidth();
+        availableWidth -= xOffset; //always remove the offset x from the width to avoid overflow
 
-        int imageWidth = 200;
-        int imageHeight = 200;
+        int imageWidth = 100;
+        int imageHeight = 100;
 
-        int effectivePageWidth = BookEntryScreen.PAGE_WIDTH + widthOffset;
-        int x = (int) ((effectivePageWidth - imageWidth * 0.5f) / 2 + xOffset);
-        int y = 7 + yOffset;
+        // Calculate the x position to center the image
+        int x = (availableWidth - imageWidth) / 2 - xOffset;
+        int y = 7;
 
         RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
         RenderSystem.enableBlend();
         guiGraphics.pose().pushPose();
-        guiGraphics.pose().scale(0.5F, 0.5F, 1);
         if (this.page.useLegacyRendering())
-            guiGraphics.blit(this.page.getImages()[this.index], x * 2 + 6, y * 2 + 6, 0, 0, imageWidth, imageHeight);
+            guiGraphics.blit(this.page.getImages()[this.index], x + 6, y * 2 + 6, 0, 0, imageWidth, imageHeight);
         else
-            guiGraphics.blit(this.page.getImages()[this.index], x * 2 + 6, y * 2 + 6, 0, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
-        guiGraphics.pose().scale(2F, 2F, 1);
+            guiGraphics.blit(this.page.getImages()[this.index], x + 6, y * 2 + 6, 0, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
         guiGraphics.pose().popPose();
 
         if (this.page.hasBorder()) {
